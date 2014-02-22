@@ -1,0 +1,11 @@
+Package: usbroadband
+Type: Package
+Title: Data for the U.S. National Broadband Map
+Version: 0.1
+Date: 2014-02-22
+Author: Authors@R: c(person("Thomas J.", "Leeper", role = c("aut", "cre"),
+                            email = "thosjleeper@gmail.com"))
+Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
+Imports: RCurl, RJSONIO
+Description: Data underlying the National Broadband Map (http://www.broadbandmap.gov/).
+License: GPL-2
