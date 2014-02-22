@@ -4,13 +4,14 @@ provider_parameters <- function(...){
 }
 
 providers <- function(name=NULL, geographyType=NULL, geographyId=NULL, version=NULL, all=TRUE, ...){
-    # haven't incorporated the `maxResults` parameter
+    if(is.null(version))
+        version <- 'dec2012'
     if(!version %in% .dataVersions)
         stop("'version' not allowed")
-    if(!geographyType=='nation' & (is.null(geographyName) & is.null(geographyId)))
+    if(!geographyType=='nation' & is.null(geographyId))
         stop("Must specify 'geographyName' or 'geographyId'")
     if(is.null(name))
-        out <- bb(api='provider', args=c(format='json'))
+        out <- bb(api='provider', args=c(format='json'), ...)
     else {
         if(is.null(geographyType) | is.null(geographyId))
             out <- bb(api=paste('provider/name', version, name, sep='/'),

@@ -12,7 +12,11 @@ function(baseurl = 'http://www.broadbandmap.gov/broadbandmap/',
                 writefunction=h$update, ...)
     response <- h$value()
     out <- fromJSON(response)
-    return(response)
+    if(!out$status=='OK'){
+        warning("Request was not OK")
+        sapply(out$message, message)
+    }
+    return(out$Results)
 }
 
 .dataVersions <- c('jun2011','dec2011','jun2012','dec2012') # earlier versions no longer available

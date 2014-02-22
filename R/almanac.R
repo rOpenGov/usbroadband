@@ -3,20 +3,40 @@ almanac_parameters <- function(...){
     return(out)
 }
 
-almanac <- function(...){
-    out <- bb(api='almanac', args=c(format='json'), ...)
+almanac <- function(state, metric, ranking, geographyType, geographyId=NULL,
+                    properties=NULL, sort='asc', version=NULL, ...){
+    if(is.null(version))
+        version <- 'dec2012'
+    if(!version %in% .dataVersions)
+        stop("'version' not allowed")
+    if(!geographyType %in% .geographyTypes)
+        stop("Unrecognized 'geographyType'")
+    if(!metric %in% c('population','household'))
+        stop("'metric' must be 'population' or 'household'")
+    if(!is.null(properties))
+        properties <- paste(properties, sep=',')
+    if(state=='nation') {
+        if(is.null(geographyId)){
+            out <- bb(api=paste('almanac', version, 'rankby/nation', metric, ranking, 
+                      geographyType, sep='/'),
+                      args=c(format='json', order=sort, properties=properties), ...)
+        } else {
+            out <- bb(api=paste('almanac', version, 'rankby/nation', metric, ranking, 
+                      geographyType, 'id', geographyId, sep='/'),
+                      args=c(format='json', order=sort, properties=properties), ...)
+        }
+    } else if(is.na(as.numeric(state))) {
+        stop("'state' must be a numeric FIPS code, see `geography`")
+    } else {
+        if(is.null(geographyId)){
+            out <- bb(api=paste('almanac', version, 'rankby/state', state, metric, ranking,
+                                geographyType, sep='/'),
+                      args=c(format='json', order=sort, properties=properties), ...)
+        } else {
+            out <- bb(api=paste('almanac', version, 'rankby/state', state, metric, ranking,
+                                geographyType, 'id', geographyId, sep='/'),
+                      args=c(format='json', order=sort, properties=properties), ...)
+        }
+    }
     return(out)
 }
-
-
-# almanac rank by geography id within state
-# {API Base}/almanac/parameters?{dataVersion}/rankby/state/{stateId}/{censusMetric}/{rankingMetric}/{geographyType}/id/{geographyId}}?properties={properties}&order={sortOrder}
-# http://www.broadbandmap.gov/developer/api/almanac-api-ranking-by-geography-id-within-a-state
-
-# almanac rank by geography id within nation
-# {API Base}/almanac/{dataVersion}/rankby/nation/{censusMetric}/{rankingMetric}/{geographyType}/id/{geographyId}?properties={properties}&order={sortOrder}
-
-# almanac rank by geography type only (within state or nation)
-# {API Base}/almanac/{dataVersion}/rankby/state/{stateId}/{censusMetric}/{rankingMetric}/{geographyType}?properties={properties}&order={sortOrder}
-# http://www.broadbandmap.gov/developer/api/almanac-api-ranking-by-geography-type-within-a-state
-# http://www.broadbandmap.gov/developer/api/almanac-api-ranking-by-geography-type-within-the-nation

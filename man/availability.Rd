@@ -1,13 +1,13 @@
-\name{county_availability}
-\alias{county_availability}
+\name{availability}
+\alias{availability}
 \title{County Broadband Availability}
 \description{Return data about county broadband availability}
 \usage{
-county_availability(state=NULL, county=NULL, version=NULL, ...)
+availability(state=NULL, county=NULL, version=NULL, ...)
 }
 \arguments{
-  \item{state}{}
-  \item{county}{}
+  \item{state}{A character string containing either \dQuote{nation} or one state name xor numerical identification number, for example as returned by \code{\link{geography}}.}
+  \item{county}{A character vector containing one more county names or numerical identification number, for example as returned by \code{\link{geography}}.}
   \item{version}{A data version, currently one of \dQuote{dec2012}, \dQuote{jun2012}, \dQuote{dec2011}, and \dQuote{jun2011}.}
   \item{\dots}{Additional arguments passed to \code{curlPerform}.}
 }

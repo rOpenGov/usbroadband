@@ -1,4 +1,6 @@
 census <- function(geographyType=NULL, geographyId=NULL, geographyName=NULL, lat=NULL, long=NULL, version=NULL, all=TRUE, ...){
+    if(is.null(version))
+        version <- 'dec2012'
     if(!version %in% .dataVersions)
         stop("'version' not allowed")
     if(!geographyType %in% c('nation',.geographyTypes))

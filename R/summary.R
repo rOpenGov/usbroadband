@@ -1,4 +1,6 @@
-bbsummary <- function(geographyType, geographyId=NULL, metric=NULL, version=NULL, ...){
+bbsummary <- function(geographyType, geographyId=NULL, metric, version=NULL, ...){
+    if(is.null(version))
+        version <- 'dec2012'
     if(!version %in% .dataVersions)
         stop("'version' not allowed")
     if(!geographyType %in% c('nation',.geographyTypes))
@@ -7,9 +9,10 @@ bbsummary <- function(geographyType, geographyId=NULL, metric=NULL, version=NULL
         stop("'metric' must be 'population' or 'household'")
     if(geographyType=='nation')
         out <- bb(api=paste('analyze', version, 'summary', metric, 'nation', sep='/'),
-                  args=c(format='json'))
+                  args=c(format='json'), ...)
     else
-        out <- bb(api=paste('analyze', version, 'summary', metric, geographyType, 'ids', paste(head(geographyId,10),collapse=','), sep='/'),
-                  args=c(format='json'))
+        out <- bb(api=paste('analyze', version, 'summary', metric, geographyType, 'ids',
+                            paste(head(geographyId,10),collapse=','), sep='/'),
+                  args=c(format='json'), ...)
     return(out)
 }
